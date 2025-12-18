@@ -3,10 +3,12 @@ const Allocator = std.mem.Allocator;
 const Io = std.Io;
 
 const Puzzle1 = @import("puzzles/Puzzle1.zig");
+const Puzzle2 = @import("puzzles/Puzzle2.zig");
 
 pub fn Puzzle(number: u16) type {
     const PuzzleN = switch (number) {
         1 => Puzzle1,
+        2 => Puzzle2,
         else => @compileError("Puzzle does not exist"),
     };
 
