@@ -4,13 +4,15 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    const exe_mod = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const exe = b.addExecutable(.{
         .name = "aoc2015zig",
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/main.zig"),
-            .target = target,
-            .optimize = optimize,
-        }),
+        .root_module = exe_mod,
     });
 
     b.installArtifact(exe);
@@ -25,4 +27,10 @@ pub fn build(b: *std.Build) void {
     if (b.args) |args| {
         run_cmd.addArgs(args);
     }
+
+    const tests = b.addTest(.{ .root_module = exe_mod });
+
+    const test_step = b.step("test", "Run tests");
+    const test_cmd = b.addRunArtifact(tests);
+    test_step.dependOn(&test_cmd.step);
 }
